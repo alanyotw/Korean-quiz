@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>韓文字母全量測驗</title>
+    <title>韓文字母全能訓練王</title>
     <style>
         :root {
-            /* 加深色階後的馬卡龍配色 */
-            --bg-color: #f5f0e1;
-            --primary-pink: #ff8b94;
-            --primary-blue: #79adff;
-            --primary-green: #70c1b3;
-            --primary-yellow: #f4a261;
-            --primary-purple: #a589ff;
-            --text-dark: #2d2d2d;
-            --btn-shadow: #d1cbc0;
+            /* 飽和度加深後的馬卡龍配色 */
+            --bg-color: #efeadb;
+            --primary-pink: #e86d77;
+            --primary-blue: #4088db;
+            --primary-green: #2d8a7c;
+            --primary-yellow: #f0934d;
+            --primary-purple: #926cdb;
+            --text-dark: #2c2c2c;
         }
 
         body {
@@ -32,33 +31,33 @@
         .container {
             background: white;
             padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+            border-radius: 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.18);
             width: 95%;
-            max-width: 600px;
+            max-width: 650px;
             text-align: center;
         }
 
-        h1 { color: var(--primary-pink); font-size: 2.5rem; margin-bottom: 1.5rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.05); }
+        h1 { color: var(--primary-pink); font-size: 2.3rem; margin-bottom: 1.5rem; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
 
-        /* 選單網格 */
+        /* 選單網格：2欄位排版 */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
         .btn {
             border: none;
-            padding: 18px 10px;
-            font-size: 1.2rem;
+            padding: 18px 12px;
+            font-size: 1.15rem;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s;
             font-weight: bold;
             color: white;
-            box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.15);
         }
 
         .btn:active { transform: translateY(3px); box-shadow: none; }
@@ -67,206 +66,163 @@
         .btn-green { background-color: var(--primary-green); }
         .btn-yellow { background-color: var(--primary-yellow); }
         .btn-purple { background-color: var(--primary-purple); }
-        .btn-dark { background-color: #555; grid-column: span 2; margin-top: 10px; }
+        /* 底部強調按鈕 */
+        .btn-challenge { grid-column: span 2; margin-top: 10px; border: 2px solid rgba(255,255,255,0.3); }
+        .btn-choice { background-color: #4a4a4a; }
+        .btn-input { background-color: #2c3e50; }
 
         .hidden { display: none; }
 
-        /* 測驗介面 */
-        #quiz-header { display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 15px; font-weight: bold; }
-        #timer { color: var(--primary-pink); font-family: monospace; }
+        /* 測驗畫面 */
+        #quiz-header { display: flex; justify-content: space-between; font-size: 1.3rem; margin-bottom: 20px; font-weight: bold; }
+        #timer { color: var(--primary-pink); font-family: 'Courier New', Courier, monospace; }
 
-        .question-box { margin: 10px 0; min-height: 180px; }
-        .question-text { font-size: 8rem; line-height: 1.1; color: #111; font-weight: 900; }
-        
+        .question-box { margin: 20px 0; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .question-text { font-size: 8.5rem; color: #000; font-weight: 900; line-height: 1; }
         .tag-batchim { 
-            display: inline-block; 
-            background: #e76f51; 
-            color: white; 
-            font-size: 1.4rem; 
-            padding: 6px 20px; 
-            border-radius: 50px; 
-            margin-top: 5px;
-            animation: bounce 0.5s ease infinite alternate;
+            background: #c62828; color: white; padding: 6px 20px; border-radius: 50px; font-size: 1.4rem; margin-top: 15px; 
+            box-shadow: 0 4px 10px rgba(198,40,40,0.3);
         }
 
-        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.05); } }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 25px 0;
-        }
-
+        /* 選擇題樣式 */
+        .options-container { display: flex; flex-direction: column; gap: 14px; width: 100%; }
         .option-btn {
-            background: #fff;
-            border: 4px solid #f0f0f0;
-            padding: 16px;
-            font-size: 1.8rem;
-            border-radius: 18px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: bold;
-            color: #444;
+            background: #fff; border: 4px solid #eee; padding: 18px; font-size: 1.8rem; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-weight: bold; color: #333;
+        }
+        .option-btn.selected { background-color: var(--primary-blue); color: white; border-color: #1a6ac7; }
+
+        /* 填空題樣式 */
+        .input-container { margin-top: 20px; width: 100%; }
+        #answer-input {
+            width: 90%; padding: 18px; font-size: 3rem; text-align: center; border: 5px solid var(--primary-blue); border-radius: 20px; outline: none; background: #fdfdfd;
         }
 
-        .option-btn:hover { border-color: var(--primary-blue); background: #f8fbff; }
-        .option-btn.selected {
-            background-color: var(--primary-blue);
-            color: white;
-            border-color: #558ee6;
-        }
+        .nav-btns { display: flex; justify-content: space-between; gap: 15px; margin-top: 35px; }
+        .nav-btns .btn { flex: 1; font-size: 1.2rem; }
 
-        .nav-btns { display: flex; justify-content: space-between; gap: 12px; }
-        .nav-btns .btn { flex: 1; font-size: 1.1rem; }
-
-        /* 結果頁 */
-        .score-circle { font-size: 5rem; color: var(--primary-pink); margin: 15px 0; font-weight: 900; }
-        .result-list { text-align: left; max-height: 400px; overflow-y: auto; padding-right: 10px; margin-top: 20px; }
-        .result-item {
-            background: #f9f9f9;
-            border-left: 8px solid #ddd;
-            margin-bottom: 15px;
-            padding: 18px;
-            border-radius: 12px;
-        }
-        .correct-border { border-left-color: var(--primary-green); }
-        .wrong-border { border-left-color: var(--primary-pink); }
+        /* 結果列表 */
+        .result-list { text-align: left; max-height: 450px; overflow-y: auto; margin-top: 25px; padding-right: 10px; }
+        .result-item { background: #f8f8f8; border-left: 10px solid #ccc; margin-bottom: 15px; padding: 20px; border-radius: 15px; }
+        .res-correct { border-left-color: var(--primary-green); }
+        .res-wrong { border-left-color: var(--primary-pink); }
     </style>
 </head>
 <body>
 
     <div id="home-screen" class="container">
         <h1>韓文字母測驗</h1>
-        <p style="margin-bottom:20px; font-weight:bold;">測驗將包含該類別「所有」字母</p>
         <div class="menu-grid">
-            <button class="btn btn-pink" onclick="startQuiz('basicVowel')">單母音 (10)</button>
-            <button class="btn btn-pink" onclick="startQuiz('doubleVowel')">雙母音 (11)</button>
-            <button class="btn btn-blue" onclick="startQuiz('basicConsonant')">基本子音 (9)</button>
-            <button class="btn btn-blue" onclick="startQuiz('aspirated')">氣音 (5)</button>
-            <button class="btn btn-purple" onclick="startQuiz('tense')">緊音 (5)</button>
-            <button class="btn btn-yellow" onclick="startQuiz('batchim')">尾音 (12)</button>
-            <button class="btn btn-dark" onclick="startQuiz('all')">★ 挑戰全集測驗 (52題) ★</button>
+            <button class="btn btn-pink" onclick="startQuiz('basicVowel', 'choice')">1. 單母音 (選擇)</button>
+            <button class="btn btn-pink" onclick="startQuiz('doubleVowel', 'choice')">2. 雙母音 (選擇)</button>
+            <button class="btn btn-pink" onclick="startQuiz('vowelAll', 'choice')">3. 母音全集 (選擇)</button>
+            <button class="btn btn-blue" onclick="startQuiz('basicConsonant', 'choice')">4. 基本子音 (選擇)</button>
+            <button class="btn btn-blue" onclick="startQuiz('aspirated', 'choice')">5. 氣音 (選擇)</button>
+            <button class="btn btn-blue" onclick="startQuiz('tense', 'choice')">6. 緊音 (選擇)</button>
+            <button class="btn btn-yellow" onclick="startQuiz('batchim', 'choice')">7. 尾音 (選擇)</button>
+            <button class="btn btn-blue" onclick="startQuiz('consonantAll', 'choice')">8. 所有子音 (選擇)</button>
+            <button class="btn btn-challenge btn-choice" onclick="startQuiz('all', 'choice')">9. 挑戰全集測驗 (選擇題)</button>
+            <button class="btn btn-challenge btn-input" onclick="startQuiz('all', 'input')">10. 挑戰全集測驗 (填空題)</button>
         </div>
+        <p style="color:#666; font-size:0.9rem;">※ 每個類別將測驗該項目的「所有」字母</p>
     </div>
 
     <div id="quiz-screen" class="container hidden">
         <div id="quiz-header">
-            <span id="progress">1 / 52</span>
+            <span id="progress">1 / 1</span>
             <span id="timer">00:00</span>
         </div>
         <div class="question-box">
             <div class="question-text" id="q-char"></div>
             <div id="q-tag"></div>
         </div>
-        <div class="options-container" id="options"></div>
+
+        <div id="choice-ui" class="options-container"></div>
+
+        <div id="input-ui" class="input-container hidden">
+            <p style="font-weight:bold;">請輸入拼音：</p>
+            <input type="text" id="answer-input" autocomplete="off" placeholder="?">
+            <p style="color:#888; font-size:0.8rem; margin-top:10px;">(輸入完畢可按 Enter 直接跳下一題)</p>
+        </div>
+
         <div class="nav-btns">
             <button class="btn btn-yellow" id="prev-btn" onclick="prevQuestion()">上一題</button>
             <button class="btn btn-blue" id="next-btn" onclick="nextQuestion()">下一題</button>
-            <button class="btn btn-pink hidden" id="submit-btn" onclick="showResults()">繳交問卷</button>
+            <button class="btn btn-pink hidden" id="submit-btn" onclick="showResults()">繳交答案</button>
         </div>
     </div>
 
     <div id="result-screen" class="container hidden">
-        <h1>測驗結果</h1>
-        <div class="score-circle" id="final-score">0</div>
-        <div id="time-spent" style="font-weight:bold; margin-bottom:10px;"></div>
+        <h1>測驗總結</h1>
+        <div style="font-size: 5rem; color: var(--primary-pink); font-weight: 900; margin: 10px 0;" id="final-score">0</div>
+        <div id="total-time" style="font-weight:bold; color:#555;"></div>
         <div class="result-list" id="explanations"></div>
-        <button class="btn btn-green" style="width: 100%; margin-top: 20px;" onclick="location.reload()">回首頁</button>
+        <button class="btn btn-green" style="width: 100%; margin-top: 20px;" onclick="location.reload()">回到主選單</button>
     </div>
 
     <script>
         const bank = {
-            basicVowel: [
-                {q: 'ㅏ', a: 'a', d: '單母音 [a]'}, {q: 'ㅑ', a: 'ya', d: '單母音 [ya]'},
-                {q: 'ㅓ', a: 'eo', d: '單母音，嘴張大的 [o]'}, {q: 'ㅕ', a: 'yeo', d: '單母音，嘴張大的 [yo]'},
-                {q: 'ㅗ', a: 'o', d: '單母音，嘴縮圓的 [o]'}, {q: 'ㅛ', a: 'yo', d: '單母音，嘴縮圓的 [yo]'},
-                {q: 'ㅜ', a: 'u', d: '單母音 [u]'}, {q: 'ㅠ', a: 'yu', d: '單母音 [yu]'},
-                {q: 'ㅡ', a: 'eu', d: '單母音 [eu]'}, {q: 'ㅣ', a: 'i', d: '單母音 [i]'}
-            ],
-            doubleVowel: [
-                {q: 'ㅐ', a: 'ae', d: '雙母音 [ae]'}, {q: 'ㅒ', a: 'yae', d: '雙母音 [yae]'},
-                {q: 'ㅔ', a: 'e', d: '雙母音 [e]'}, {q: 'ㅖ', a: 'ye', d: '雙母音 [ye]'},
-                {q: 'ㅘ', a: 'wa', d: '雙母音 [wa]'}, {q: 'ㅙ', a: 'wae', d: '雙母音 [wae]'},
-                {q: 'ㅚ', a: 'oe', d: '雙母音 [oe/we]'}, {q: 'ㅝ', a: 'wo', d: '雙母音 [wo]'},
-                {q: 'ㅞ', a: 'we', d: '雙母音 [we]'}, {q: 'ㅟ', a: 'wi', d: '雙母音 [wi]'},
-                {q: 'ㅢ', a: 'ui', d: '雙母音 [eu]+[i]'}
-            ],
-            basicConsonant: [
-                {q: 'ㄱ', a: 'g/k', d: '基本子音'}, {q: 'ㄴ', a: 'n', d: '基本子音'},
-                {q: 'ㄷ', a: 'd/t', d: '基本子音'}, {q: 'ㄹ', a: 'r/l', d: '基本子音'},
-                {q: 'ㅁ', a: 'm', d: '基本子音'}, {q: 'ㅂ', a: 'b/p', d: '基本子音'},
-                {q: 'ㅅ', a: 's', d: '基本子音'}, {q: 'ㅇ', a: '(無)', d: '作為初聲時不發音'},
-                {q: 'ㅈ', a: 'j', d: '基本子音'}
-            ],
-            aspirated: [
-                {q: 'ㅋ', a: 'k', d: '氣音'}, {q: 'ㅌ', a: 't', d: '氣音'},
-                {q: 'ㅍ', a: 'p', d: '氣音'}, {q: 'ㅎ', a: 'h', d: '氣音'},
-                {q: 'ㅊ', a: 'ch', d: '氣音'}
-            ],
-            tense: [
-                {q: 'ㄲ', a: 'kk', d: '緊音 (硬音)'}, {q: 'ㄸ', a: 'tt', d: '緊音 (硬音)'},
-                {q: 'ㅃ', a: 'pp', d: '緊音 (硬音)'}, {q: 'ㅆ', a: 'ss', d: '緊音 (硬音)'},
-                {q: 'ㅉ', a: 'jj', d: '緊音 (硬音)'}
-            ],
-            batchim: [
-                {q: 'ㄱ', a: 'k', d: '尾音塞音 [k]', isB: true}, {q: 'ㄴ', a: 'n', d: '尾音鼻音 [n]', isB: true},
-                {q: 'ㄷ', a: 't', d: '尾音塞音 [t]', isB: true}, {q: 'ㄹ', a: 'l', d: '尾音流音 [l]', isB: true},
-                {q: 'ㅁ', a: 'm', d: '尾音鼻音 [m]', isB: true}, {q: 'ㅂ', a: 'p', d: '尾音塞音 [p]', isB: true},
-                {q: 'ㅅ', a: 't', d: '尾音發 [t] 聲', isB: true}, {q: 'ㅇ', a: 'ng', d: '尾音鼻音 [ng]', isB: true},
-                {q: 'ㅈ', a: 't', d: '尾音發 [t] 聲', isB: true}, {q: 'ㅊ', a: 't', d: '尾音發 [t] 聲', isB: true},
-                {q: 'ㅋ', a: 'k', d: '尾音發 [k] 聲', isB: true}, {q: 'ㅎ', a: 't', d: '尾音發 [t] 聲', isB: true}
-            ]
+            basicVowel: [{q:'ㅏ',a:'a',d:'單母音'},{q:'ㅑ',a:'ya',d:'單母音'},{q:'ㅓ',a:'eo',d:'單母音'},{q:'ㅕ',a:'yeo',d:'單母音'},{q:'ㅗ',a:'o',d:'單母音'},{q:'ㅛ',a:'yo',d:'單母音'},{q:'ㅜ',a:'u',d:'單母音'},{q:'ㅠ',a:'yu',d:'單母音'},{q:'ㅡ',a:'eu',d:'單母音'},{q:'ㅣ',a:'i',d:'單母音'}],
+            doubleVowel: [{q:'ㅐ',a:'ae',d:'雙母音'},{q:'ㅒ',a:'yae',d:'雙母音'},{q:'ㅔ',a:'e',d:'雙母音'},{q:'ㅖ',a:'ye',d:'雙母音'},{q:'ㅘ',a:'wa',d:'雙母音'},{q:'ㅙ',a:'wae',d:'雙母音'},{q:'ㅚ',a:'oe',d:'雙母音'},{q:'ㅝ',a:'wo',d:'雙母音'},{q:'ㅞ',a:'we',d:'雙母音'},{q:'ㅟ',a:'wi',d:'雙母音'},{q:'ㅢ',a:'ui',d:'雙母音'}],
+            basicConsonant: [{q:'ㄱ',a:'g/k',d:'子音'},{q:'ㄴ',a:'n',d:'子音'},{q:'ㄷ',a:'d/t',d:'子音'},{q:'ㄹ',a:'r/l',d:'子音'},{q:'ㅁ',a:'m',d:'子音'},{q:'ㅂ',a:'b/p',d:'子音'},{q:'ㅅ',a:'s',d:'子音'},{q:'ㅇ',a:'(無)',d:'初聲不發音'},{q:'ㅈ',a:'j',d:'子音'}],
+            aspirated: [{q:'ㅋ',a:'k',d:'氣音'},{q:'ㅌ',a:'t',d:'氣音'},{q:'ㅍ',a:'p',d:'氣音'},{q:'ㅎ',a:'h',d:'氣音'},{q:'ㅊ',a:'ch',d:'氣音'}],
+            tense: [{q:'ㄲ',a:'kk',d:'緊音'},{q:'ㄸ',a:'tt',d:'緊音'},{q:'ㅃ',a:'pp',d:'緊音'},{q:'ㅆ',a:'ss',d:'緊音'},{q:'ㅉ',a:'jj',d:'緊音'}],
+            batchim: [{q:'ㄱ',a:'k',d:'尾音[k]',isB:true},{q:'ㄴ',a:'n',d:'尾音[n]',isB:true},{q:'ㄷ',a:'t',d:'尾音[t]',isB:true},{q:'ㄹ',a:'l',d:'尾音[l]',isB:true},{q:'ㅁ',a:'m',d:'尾音[m]',isB:true},{q:'ㅂ',a:'p',d:'尾音[p]',isB:true},{q:'ㅅ',a:'t',d:'尾音[t]',isB:true},{q:'ㅇ',a:'ng',d:'尾音[ng]',isB:true},{q:'ㅈ',a:'t',d:'尾音[t]',isB:true},{q:'ㅊ',a:'t',d:'尾音[t]',isB:true},{q:'ㅋ',a:'k',d:'尾音[k]',isB:true},{q:'ㅎ',a:'t',d:'尾音[t]',isB:true}]
         };
 
         let currentQuestions = [];
         let currentIndex = 0;
         let userAnswers = [];
-        let timerInterval;
+        let quizMode = 'choice'; 
+        let timer;
         let secs = 0;
 
-        // 洗牌算法
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+        function shuffle(arr) {
+            let a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [a[i], a[j]] = [a[j], a[i]];
             }
-            return array;
+            return a;
         }
 
-        function startQuiz(type) {
+        function startQuiz(type, mode) {
+            quizMode = mode;
             let pool = [];
-            if(type === 'all') {
-                pool = [...bank.basicVowel, ...bank.doubleVowel, ...bank.basicConsonant, ...bank.aspirated, ...bank.tense, ...bank.batchim];
-            } else {
-                pool = [...bank[type]];
-            }
-
-            // 全部字母都拿出來測驗，並洗牌
-            currentQuestions = shuffle(pool);
-            userAnswers = new Array(currentQuestions.length).fill(null);
             
-            // 生成每題的隨機選項
-            currentQuestions.forEach(q => {
-                let opts = [q.a];
-                while(opts.length < 4) {
-                    let r = pool[Math.floor(Math.random() * pool.length)].a;
-                    if(!opts.includes(r)) opts.push(r);
-                }
-                q.options = shuffle(opts);
-            });
+            // 處理組合邏輯
+            if(type === 'vowelAll') pool = [...bank.basicVowel, ...bank.doubleVowel];
+            else if(type === 'consonantAll') pool = [...bank.basicConsonant, ...bank.aspirated, ...bank.tense, ...bank.batchim];
+            else if(type === 'all') pool = [...bank.basicVowel, ...bank.doubleVowel, ...bank.basicConsonant, ...bank.aspirated, ...bank.tense, ...bank.batchim];
+            else pool = [...bank[type]];
+
+            // 全量測驗邏輯
+            currentQuestions = shuffle(pool);
+            userAnswers = new Array(currentQuestions.length).fill('');
+
+            if(mode === 'choice') {
+                currentQuestions.forEach(q => {
+                    let opts = [q.a];
+                    while(opts.length < 4) {
+                        let r = pool[Math.floor(Math.random()*pool.length)].a;
+                        if(!opts.includes(r)) opts.push(r);
+                    }
+                    q.options = shuffle(opts);
+                });
+            }
 
             document.getElementById('home-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
-            
+            document.getElementById('choice-ui').classList.toggle('hidden', mode === 'input');
+            document.getElementById('input-ui').classList.toggle('hidden', mode === 'choice');
+
             secs = 0;
-            timerInterval = setInterval(() => {
+            timer = setInterval(() => {
                 secs++;
                 let m = Math.floor(secs/60).toString().padStart(2,'0');
                 let s = (secs%60).toString().padStart(2,'0');
                 document.getElementById('timer').innerText = `${m}:${s}`;
             }, 1000);
-            
+
             currentIndex = 0;
             renderQuestion();
         }
@@ -275,22 +231,26 @@
             const q = currentQuestions[currentIndex];
             document.getElementById('progress').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
             document.getElementById('q-char').innerText = q.q;
-            
-            const tagEl = document.getElementById('q-tag');
-            tagEl.innerHTML = q.isB ? '<div class="tag-batchim">尾音 (Batchim)</div>' : '';
+            document.getElementById('q-tag').innerHTML = q.isB ? '<div class="tag-batchim">尾音模式 (Batchim)</div>' : '';
 
-            const optDiv = document.getElementById('options');
-            optDiv.innerHTML = '';
-            q.options.forEach(o => {
-                const b = document.createElement('button');
-                b.className = `option-btn ${userAnswers[currentIndex] === o ? 'selected' : ''}`;
-                b.innerText = o;
-                b.onclick = () => { userAnswers[currentIndex] = o; renderQuestion(); };
-                optDiv.appendChild(b);
-            });
+            if(quizMode === 'choice') {
+                const ui = document.getElementById('choice-ui');
+                ui.innerHTML = '';
+                q.options.forEach(o => {
+                    const b = document.createElement('button');
+                    b.className = `option-btn ${userAnswers[currentIndex] === o ? 'selected' : ''}`;
+                    b.innerText = o;
+                    b.onclick = () => { userAnswers[currentIndex] = o; renderQuestion(); };
+                    ui.appendChild(b);
+                });
+            } else {
+                const input = document.getElementById('answer-input');
+                input.value = userAnswers[currentIndex];
+                input.oninput = (e) => { userAnswers[currentIndex] = e.target.value; };
+                input.focus();
+            }
 
             document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
-            
             const isLast = currentIndex === currentQuestions.length - 1;
             document.getElementById('next-btn').classList.toggle('hidden', isLast);
             document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
@@ -299,29 +259,47 @@
         function nextQuestion() { if(currentIndex < currentQuestions.length - 1) { currentIndex++; renderQuestion(); } }
         function prevQuestion() { if(currentIndex > 0) { currentIndex--; renderQuestion(); } }
 
+        // Enter 鍵快速操作
+        window.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') {
+                if(quizMode === 'input' || userAnswers[currentIndex] !== '') {
+                    if(currentIndex < currentQuestions.length - 1) nextQuestion();
+                    else showResults();
+                }
+            }
+        });
+
         function showResults() {
-            clearInterval(timerInterval);
-            let scoreCount = 0;
+            clearInterval(timer);
+            let score = 0;
             const exp = document.getElementById('explanations');
             exp.innerHTML = '';
 
             currentQuestions.forEach((q, i) => {
-                const correct = userAnswers[i] === q.a;
-                if(correct) scoreCount++;
-                const item = document.createElement('div');
-                item.className = `result-item ${correct ? 'correct-border' : 'wrong-border'}`;
-                item.innerHTML = `
-                    <div style="font-size:1.4rem;"><strong>#${i+1} 【${q.q}】</strong> ${q.isB ? '<span style="color:#e76f51;font-weight:bold;">(尾音)</span>' : ''}</div>
-                    <div style="margin:5px 0;">您的回答：<span style="color:${correct?'var(--primary-green)':'var(--primary-pink)'}; font-weight:bold;">${userAnswers[i] || '未答'}</span></div>
-                    <div>正確答案：<span style="color:var(--primary-green); font-weight:bold;">${q.a}</span></div>
-                    <div style="margin-top:8px; font-size:0.95rem; color:#666; border-top:1px solid #eee; padding-top:5px;">詳解：${q.d}</div>
+                const u = (userAnswers[i] || "").trim().toLowerCase();
+                const a = q.a.toLowerCase();
+                // 判斷多重正確答案 (如 g/k)
+                const isCorrect = a.split('/').includes(u) || u === a;
+                
+                if(isCorrect) score++;
+                
+                const div = document.createElement('div');
+                div.className = `result-item ${isCorrect ? 'res-correct' : 'res-wrong'}`;
+                div.innerHTML = `
+                    <div style="font-size:1.5rem; font-weight:900;">#${i+1} 【 ${q.q} 】 ${q.isB ? '<span style="color:#c62828; font-size:1rem;">(尾音)</span>' : ''}</div>
+                    <div style="margin-top:10px;">
+                        您的回答：<span style="color:${isCorrect?'var(--primary-green)':'var(--primary-pink)'}; font-weight:bold;">${userAnswers[i] || '(未填寫)'}</span><br>
+                        正確答案：<span style="color:var(--primary-green); font-weight:bold;">${q.a}</span>
+                    </div>
+                    <div style="margin-top:8px; border-top:1px solid #ddd; padding-top:5px; font-size:0.9rem; color:#666;">
+                        類型：${q.d}
+                    </div>
                 `;
-                exp.appendChild(item);
+                exp.appendChild(div);
             });
 
-            const finalScore = Math.round((scoreCount / currentQuestions.length) * 100);
-            document.getElementById('final-score').innerText = finalScore + " 分";
-            document.getElementById('time-spent').innerText = "總耗時: " + document.getElementById('timer').innerText;
+            document.getElementById('final-score').innerText = Math.round((score/currentQuestions.length)*100) + " 分";
+            document.getElementById('total-time').innerText = "總測驗時間：" + document.getElementById('timer').innerText;
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
         }
